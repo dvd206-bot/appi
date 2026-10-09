@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mecenat</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    
+    .card-font {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
+      color: #000000;
+      letter-spacing: 0;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Container Queries: Låser text och proportioner till kortets bredd */
+    .card-container {
+      container-type: inline-size;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1184 / 740;
+    }
+
+    /* Permanent 90 graders rotation */
+    .permanent-card-rotator {
+      transform: rotate(90deg);
+      transform-origin: center center;
+      width: min(540px, 72vh);
+      max-width: calc((100vw - 32px) * 1.58);
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 440px) {
+      .permanent-card-rotator {
+        max-width: calc((440px - 32px) * 1.58);
+      }
+    }
+
+    .mecenat-card-shadow {
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    /* ======================================================== */
+    /* AUTENTISKT CIRKELMÖNSTER OCH RYTM FRÅN MECENAT-VIDEON   */
+    /* ======================================================== */
+    .mecenat-watermark-overlay {
+      position: absolute;
+      top: 75.9%;
+      right: 14.0%;
+      transform: translate(50%, -50%);
+      width: 32cqw;
+      height: 32cqw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 25;
+      /* Mjuk och lugn sinusformad pulsering */
+      animation: mecenatUltraSoftPulse 3.0s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+      will-change: opacity, transform;
+    }
+
+    .security-ring {
+      position: absolute;
+      border-radius: 50%;
+      border-style: solid;
+      border-color: rgba(235, 138, 36, 0.72);
+      box-sizing: border-box;
+    }
+
+    /* Inre cirkeln */
+    .ring-inner {
+      width: 15.8cqw;
+      height: 15.8cqw;
+      border-width: 1.75cqw;
+    }
+
+    /* Yttre cirkeln */
+    .ring-middle {
+      width: 25.2cqw;
+      height: 25.2cqw;
+      border-width: 2.05cqw;
+    }
+
+    /* Mjuk infasning, stillsam paus och långsam utfasning */
+    @keyframes mecenatUltraSoftPulse {
+      0% {
+        opacity: 0;
+        transform: translate(50%, -50%) scale(0.97);
+      }
+      15% {
+        opacity: 0;
+      }
+      45% {
+        opacity: 0.82;
+        transform: translate(50%, -50%) scale(1.0);
+      }
+      65% {
+        opacity: 0.82;
+        transform: translate(50%, -50%) scale(1.0);
+      }
+      90% {
+        opacity: 0;
+        transform: translate(50%, -50%) scale(1.02);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(50%, -50%) scale(0.97);
+      }
+    }
+
+    /* Vertikal text till vänster om kortet */
+    .vertical-valid-badge {
+      writing-mode: vertical-rl;
+    }
+  </style>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center m-0 p-0 overflow-x-hidden md:p-3 text-neutral-900">
+
+  <!-- Mobilskal -->
+  <div id="phone-frame" class="relative w-full max-w-[440px] h-[100dvh] md:h-[900px] bg-white md:rounded-[42px] overflow-hidden shadow-2xl flex flex-col border border-neutral-800">
+
+    <!-- ======================================================== -->
+    <!-- STARTSIDA: Liseberg-kampanjen (HELT STATIONÄR)          -->
+    <!-- ======================================================== -->
+    <div id="home-view" class="absolute inset-0 flex flex-col pb-20 bg-white overflow-y-auto hide-scrollbar z-10">
+      
+      <!-- Sökfält & Brevikon -->
+      <div class="sticky top-0 z-20 bg-white px-4 pt-3.5 pb-2.5 border-b border-gray-100 flex items-center gap-3">
+        <div class="flex-1 flex items-center bg-[#f0f3f6] rounded-full px-4 py-2.5 shadow-inner">
+          <svg class="w-5 h-5 text-gray-700 mr-2.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Hitta dina studentrabatter" 
+            class="bg-transparent w-full text-sm font-normal text-gray-700 placeholder-gray-500 focus:outline-none"
+            readonly
+          >
+        </div>
+        <button class="p-2 text-gray-800 hover:text-black active:scale-95 transition-transform" aria-label="Meddelanden">
+          <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Liseberg Hero-sektion -->
+      <div class="relative w-full">
+        <div class="w-full h-56 bg-slate-900 relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=900&q=80" 
+            alt="Liseberg Karusell"
+            class="w-full h-full object-cover object-center brightness-95 contrast-110"
+            onerror="this.src='https://placehold.co/600x400/09192f/ffffff?text=Liseberg+Halloween'"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#cbf5f7] via-transparent to-black/30"></div>
+        </div>
+
+        <div class="bg-[#cbf5f7] px-6 pt-5 pb-9 text-center rounded-b-[2.2rem]">
+          <h1 class="text-2xl font-extrabold text-neutral-900 flex items-center justify-center gap-1.5 tracking-tight">
+            Liseberg <span class="text-xl">🧡</span> studenter
+          </h1>
+          <p class="text-neutral-900 text-sm font-medium mt-3 px-3 leading-snug">
+            Dagens sparfest 👻 Upp till 25 % studentrabatt på Entré &amp; Åkpass under Halloween på Liseberg.
+          </p>
+
+          <button class="mt-5 px-7 py-2.5 bg-[#0193b2] active:bg-[#007f9c] text-white font-semibold text-sm rounded-full shadow-sm hover:shadow active:scale-95 transition-transform">
+            Till kampanjen
+          </button>
+        </div>
+      </div>
+
+      <!-- Spara mer i höst sektion -->
+      <div class="px-5 pt-7 pb-4">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-neutral-900 flex items-center gap-1.5">
+            Spara mer i höst <span class="text-base">🍁</span>
+          </h2>
+          <svg class="w-5 h-5 text-neutral-900 cursor-pointer" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </div>
+
+        <div class="flex space-x-4 overflow-x-auto hide-scrollbar -mx-5 px-5 pb-2">
+          <!-- Gina Tricot -->
+          <div class="min-w-[270px] max-w-[270px] bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+            <div class="relative h-36 bg-gray-200">
+              <img 
+                src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80" 
+                alt="Gina Tricot Mode"
+                class="w-full h-full object-cover"
+                onerror="this.src='https://placehold.co/400x300/e2e8f0/333333?text=Gina+Tricot'"
+              />
+              <span class="absolute top-3 left-3 bg-[#e65100] text-white text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wide shadow">
+                KAMPANJ
+              </span>
+            </div>
+            <div class="p-3 bg-white flex items-center justify-between">
+              <span class="font-bold text-gray-900 text-sm tracking-tight">gina tricot</span>
+              <span class="text-xs text-gray-500 font-medium">10% studentrabatt</span>
+            </div>
+          </div>
+
+          <!-- Teknik & Resor (Klicka här för att öppna redigeringen) -->
+          <div id="teknik-card-trigger" class="min-w-[270px] max-w-[270px] bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col cursor-pointer active:scale-[0.98] transition-transform" title="Klicka för att redigera kortuppgifter">
+            <div class="relative h-36 bg-gray-100">
+              <img 
+                src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80" 
+                alt="Teknik & Resor"
+                class="w-full h-full object-cover"
+                onerror="this.src='https://placehold.co/400x300/f3f4f6/333333?text=Teknik+Resor'"
+              />
+              <span class="absolute top-3 left-3 bg-[#e65100] text-white text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wide shadow">
+                KAMPANJ
+              </span>
+            </div>
+            <div class="p-3 bg-white flex items-center justify-between">
+              <span class="font-bold text-gray-900 text-sm tracking-tight">Teknik &amp; Resor</span>
+              <span class="text-xs text-gray-500 font-medium">Upp till 30%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottenmeny -->
+    <nav class="absolute bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 flex items-center justify-around px-2 z-20">
+      <!-- HEM -->
+      <button class="flex flex-col items-center justify-center flex-1 text-[#008f9c] active:scale-95 transition-transform">
+        <svg class="w-6 h-6 stroke-current fill-current" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span class="text-[10px] font-bold mt-1 tracking-tight">HEM</span>
+      </button>
+
+      <!-- UTFORSKA -->
+      <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
+        <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/>
+          <path stroke-linecap="round" d="M4 6h6M4 10h4"/>
+        </svg>
+        <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">UTFORSKA</span>
+      </button>
+
+      <!-- KORT (Öppnar kortvyn från höger) -->
+      <button id="open-cards-btn" class="flex flex-col items-center justify-center flex-1 text-gray-950 active:scale-90 transition-transform group cursor-pointer" aria-label="Visa Mecenatkort">
+        <div class="w-6 h-6 border-2 border-gray-900 rounded-[4px] flex items-center justify-center relative p-0.5">
+          <div class="w-full h-full border-l border-gray-900 pl-0.5 flex flex-col justify-around">
+            <div class="h-0.5 w-2 bg-gray-900"></div>
+            <div class="h-0.5 w-2 bg-gray-900"></div>
+          </div>
+        </div>
+        <span class="text-[10px] font-extrabold mt-1 tracking-tight">KORT</span>
+      </button>
+
+      <!-- KAMPANJER -->
+      <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
+        <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">KAMPANJER</span>
+      </button>
+
+      <!-- FAVORITER -->
+      <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
+        <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">FAVORITER</span>
+      </button>
+    </nav>
+
+    <!-- ======================================================== -->
+    <!-- HELSKÄRMSKORT (Glider ut till vänster, stationär bakgrund)-->
+    <!-- ======================================================== -->
+    <div 
+      id="cards-modal" 
+      class="absolute inset-0 bg-black z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between p-2 select-none overflow-hidden"
+    >
+      <!-- Tom toppsektion -->
+      <div class="h-6 w-full z-40"></div>
+
+      <!-- Center Cards Viewport -->
+      <div class="relative flex-1 flex items-center justify-center w-full overflow-hidden">
+        
+        <!-- Vertikal "Valid thru"-text till vänster om kortet -->
+        <div class="absolute left-2 bottom-20 z-40 flex items-center gap-1.5 text-white/90 text-[11px] font-normal vertical-valid-badge pointer-events-none select-none">
+          <svg class="w-3.5 h-3.5 text-white inline-block flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+            <path d="M6 15h3v2H6z"/>
+          </svg>
+          <span class="tracking-wide">Valid thru <span class="display-valid-thru-short">2027-02-10</span></span>
+        </div>
+
+        <!-- Carousel Track -->
+        <div id="cards-track" class="w-full h-full flex transition-transform duration-300 ease-out items-center">
+          
+          <!-- ======================================================== -->
+          <!-- KORT 1: UMEÅ MEDICINSKA STUDENTKÅR                       -->
+          <!-- ======================================================== -->
+          <div class="w-full h-full flex-shrink-0 flex items-center justify-center p-1">
+            
+            <div class="permanent-card-rotator flex items-center justify-center">
+              
+              <!-- Klick på kortet glider ut åt vänster -->
+              <div id="card-surface-1" class="card-container rounded-[22px] overflow-hidden mecenat-card-shadow select-none bg-neutral-900 border border-neutral-700/50 relative cursor-pointer active:scale-[0.99] transition-transform">
+                
+                <!-- Kortbakgrund: Laddar Kort.png -->
+                <img 
+                  id="card1-img"
+                  src="Kort.png" 
+                  alt="Umeå Medicinska Studentkår Kortbakgrund"
+                  class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                  onerror="this.src='kort.png'; this.onerror=function(){ this.style.display='none'; document.getElementById('card1-fallback').style.display='block'; };"
+                />
+
+                <div id="card1-fallback" class="hidden absolute inset-0 w-full h-full bg-[#fde9eb]">
+                  <div class="absolute inset-0 bg-gradient-to-r from-[#ffa4b6] via-[#ffd0d9] to-[#ffffff] opacity-90"></div>
+                </div>
+
+                <!-- DYNAMISKT TEXTLAGER -->
+                <div class="absolute inset-0 z-10 pointer-events-none">
+                  
+                  <div class="absolute top-[2.0%] right-[3.5%] text-right leading-none">
+                    <span class="card-font text-[2.2cqw]">STUDENT ID: </span>
+                    <span class="card-font text-[2.2cqw] display-student-id">08167597</span>
+                  </div>
+
+                  <div class="absolute top-[12.8%] right-[3.5%] text-right leading-none">
+                    <span class="card-font text-[2.2cqw]">Giltigt t.o.m </span>
+                    <span class="card-font text-[2.2cqw] display-valid-thru-long">2027-08-22</span>
+                  </div>
+
+                  <div class="absolute top-[45.0%] right-[3.5%] text-right leading-none">
+                    <span class="card-font text-[4.0cqw] display-valid-thru-short">
+                      2027-02-10
+                    </span>
+                  </div>
+
+                  <div class="absolute top-[52.8%] left-[4.5%] leading-none">
+                    <span class="card-font text-[4.7cqw] tracking-[0.02em] display-card-num-1">
+                      9752 2382 3453 9234
+                    </span>
+                  </div>
+
+                  <div class="absolute top-[63.6%] left-[4.5%] leading-none">
+                    <span class="card-font text-[4.2cqw] display-first-name">
+                      Namin
+                    </span>
+                  </div>
+
+                  <div class="absolute top-[71.4%] left-[4.5%] leading-none">
+                    <span class="card-font text-[4.2cqw] display-last-name">
+                      David
+                    </span>
+                  </div>
+
+                  <div class="absolute top-[79.5%] left-[4.5%] leading-none">
+                    <span class="card-font text-[3.9cqw] display-birthdate">
+                      2006-06-14
+                    </span>
+                  </div>
+
+                </div>
+
+                <!-- AUTENTISKT SÄKERHETSMÖNSTER MED RYTM FRÅN VIDEON -->
+                <div class="mecenat-watermark-overlay">
+                  <div class="security-ring ring-inner"></div>
+                  <div class="security-ring ring-middle"></div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- KORT 2: SVENSKT UNIVERSITET / HÖGSKOLA                   -->
+          <!-- ======================================================== -->
+          <div class="w-full h-full flex-shrink-0 flex items-center justify-center p-1">
+            
+            <div class="permanent-card-rotator flex items-center justify-center">
+              
+              <!-- Klick på kort 2 glider ut åt vänster -->
+              <div id="card-surface-2" class="card-container rounded-[22px] overflow-hidden mecenat-card-shadow select-none bg-[#f1f3f5] text-black border border-neutral-300 relative cursor-pointer active:scale-[0.99] transition-transform">
+                
+                <div class="absolute inset-0 bg-[#f1f3f5]"></div>
+
+                <div class="relative z-10 flex flex-col justify-between h-full p-[4.2cqw] pointer-events-none">
+                  
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center space-x-[1.2cqw]">
+                      <svg class="w-[5.4cqw] h-[5.4cqw] text-[#0094a4]" viewBox="0 0 32 32" fill="currentColor">
+                        <rect x="2" y="6" width="18" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="3"/>
+                        <rect x="9" y="11" width="8" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                        <rect x="22" y="6" width="3.5" height="20" rx="1.7"/>
+                        <rect x="27.5" y="6" width="3.5" height="20" rx="1.7"/>
+                      </svg>
+                      <span class="text-[5.4cqw] font-normal tracking-tight text-neutral-800 leading-none">
+                        Mecenat
+                      </span>
+                    </div>
+
+                    <div class="text-right text-[2.0cqw] text-neutral-900 leading-tight card-font">
+                      <div>STUDENT ID: <span class="display-student-id">08167597</span></div>
+                      <div>Svenskt Universitet/Högskola</div>
+                      <div>HT 26</div>
+                    </div>
+                  </div>
+
+                  <div class="mt-auto">
+                    <div class="flex justify-between items-end">
+                      
+                      <div>
+                        <div class="text-[4.7cqw] tracking-[0.02em] text-neutral-950 card-font display-card-num-2">
+                          9752 2382 7046 3976
+                        </div>
+                        <div class="mt-1 leading-snug card-font">
+                          <div class="text-[4.2cqw] display-first-name">Namin</div>
+                          <div class="text-[4.2cqw] display-last-name">David</div>
+                          <div class="text-[3.9cqw] mt-0.5 display-birthdate">2006-06-14</div>
+                        </div>
+                      </div>
+
+                      <div class="flex flex-col items-end">
+                        <div class="text-right mb-1">
+                          <div class="text-[1.8cqw] font-normal text-neutral-800 uppercase tracking-tight">DISCOUNTS VALID THRU</div>
+                          <div class="text-[4.4cqw] font-normal text-neutral-950 card-font">2027-03-31</div>
+                        </div>
+
+                        <!-- Verified by Mecenat -->
+                        <div class="bg-white p-[0.6cqw] px-[1.5cqw] rounded-lg border border-neutral-300 shadow-sm flex flex-col items-center">
+                          <span class="text-[1.4cqw] font-bold tracking-wider text-neutral-600 uppercase">VERIFIED BY</span>
+                          <div class="flex items-center gap-1 mt-0.5">
+                            <svg class="w-[2.4cqw] h-[2.4cqw] text-[#0094a4]" viewBox="0 0 30 30" fill="currentColor">
+                              <rect x="2" y="6" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="3"/>
+                              <rect x="10" y="10" width="8" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                              <rect x="20" y="6" width="3" height="18" rx="1.5"/>
+                              <rect x="25" y="6" width="3" height="18" rx="1.5"/>
+                            </svg>
+                            <span class="text-[2.2cqw] font-bold tracking-tighter text-[#1f2937]">Mecenat</span>
+                          </div>
+                        </div>
+
+                        <!-- Reselogotyper -->
+                        <div class="flex items-center gap-1.5 mt-1 bg-white p-[0.4cqw] px-[1.2cqw] rounded-md border border-neutral-200">
+                          <span class="text-[1.8cqw] font-bold italic tracking-tighter text-neutral-900 font-sans">SJ</span>
+                          <div class="w-[1px] h-[1.8cqw] bg-neutral-300"></div>
+                          <span class="text-[1.6cqw]">🎫</span>
+                          <span class="text-[1.7cqw] font-bold text-[#007ac2]">SL</span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- AUTENTISKT SÄKERHETSMÖNSTER ÄVEN PÅ KORT 2 -->
+                <div class="mecenat-watermark-overlay" style="top: 73%; right: 13.5%;">
+                  <div class="security-ring ring-inner"></div>
+                  <div class="security-ring ring-middle"></div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BOTTYTA: 3 Prickar i mitten under kortet + Stängningskryss längst ner i mitten -->
+      <div class="w-full flex flex-col items-center justify-center gap-3 pt-1 pb-3 z-40">
+        
+        <!-- Pager-prickar (horisontellt i mitten) -->
+        <div class="flex items-center gap-2.5 pointer-events-auto">
+          <button id="dot-0" onclick="switchCard(0)" class="w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow"></button>
+          <button id="dot-1" onclick="switchCard(1)" class="w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer"></button>
+          <div class="w-2.5 h-2.5 rounded-full bg-neutral-700"></div>
+        </div>
+
+        <!-- Runt vitt stängningskryss (X) centrerat längst ner -->
+        <button 
+          id="close-cards-btn" 
+          class="w-11 h-11 rounded-full bg-white text-black flex items-center justify-center shadow-2xl active:scale-90 transition-transform cursor-pointer"
+          aria-label="Stäng kortvyn"
+        >
+          <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2.6" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <!-- Hemstreck på mobilen -->
+        <div class="w-28 h-1 bg-white/30 rounded-full mt-1"></div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- REDIGERINGSMODAL FÖR KORTUPPGIFTER                       -->
+    <!-- (Öppnas vid klick på Teknik & Resor bilden)              -->
+    <!-- ======================================================== -->
+    <div id="edit-modal" class="hidden absolute inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl border border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-bold text-gray-900">Anpassa ditt kort</h3>
+          <button id="close-editor-btn" class="text-gray-400 hover:text-gray-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <form id="edit-card-form" class="space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Förnamn</label>
+              <input id="input-first-name" type="text" value="Namin" required class="w-full px-3 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-normal text-gray-900">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Efternamn</label>
+              <input id="input-last-name" type="text" value="David" required class="w-full px-3 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-normal text-gray-900">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Födelsedatum (ÅÅÅÅ-MM-DD)</label>
+            <input id="input-birthdate" type="text" value="2006-06-14" required class="w-full px-3 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-normal text-gray-900">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Student-ID</label>
+              <input id="input-student-id" type="text" value="08167597" class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-normal text-gray-900">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Kortnr (Kort 1)</label>
+              <input id="input-card-num-1" type="text" value="9752 2382 3453 9234" class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-normal text-gray-900">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Rabatt giltigt t.o.m</label>
+              <input id="input-valid-short" type="text" value="2027-02-10" class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-normal text-gray-900">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Kort giltigt t.o.m</label>
+              <input id="input-valid-long" type="text" value="2027-08-22" class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-normal text-gray-900">
+            </div>
+          </div>
+
+          <div class="pt-2 flex gap-2">
+            <button type="button" id="cancel-edit-btn" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-xl">
+              Avbryt
+            </button>
+            <button type="submit" class="flex-1 py-2.5 bg-[#008f9c] active:bg-[#007480] text-white text-sm font-bold rounded-xl shadow">
+              Spara &amp; Klar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* State management */
+    let activeCardIndex = 0;
+    const totalCards = 2;
+
+    /* DOM Elements */
+    const cardsModal = document.getElementById('cards-modal');
+    const openCardsBtn = document.getElementById('open-cards-btn');
+    const closeCardsBtn = document.getElementById('close-cards-btn');
+    const cardsTrack = document.getElementById('cards-track');
+    const cardSurface1 = document.getElementById('card-surface-1');
+    const cardSurface2 = document.getElementById('card-surface-2');
+
+    const teknikCardTrigger = document.getElementById('teknik-card-trigger');
+    const editModal = document.getElementById('edit-modal');
+    const closeEditorBtn = document.getElementById('close-editor-btn');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const editCardForm = document.getElementById('edit-card-form');
+
+    /* Input fields */
+    const inputFirstName = document.getElementById('input-first-name');
+    const inputLastName = document.getElementById('input-last-name');
+    const inputBirthdate = document.getElementById('input-birthdate');
+    const inputStudentId = document.getElementById('input-student-id');
+    const inputCardNum1 = document.getElementById('input-card-num-1');
+    const inputValidShort = document.getElementById('input-valid-short');
+    const inputValidLong = document.getElementById('input-valid-long');
+
+    /* Display elements */
+    const displayFirstNames = document.querySelectorAll('.display-first-name');
+    const displayLastNames = document.querySelectorAll('.display-last-name');
+    const displayBirthdates = document.querySelectorAll('.display-birthdate');
+    const displayStudentIds = document.querySelectorAll('.display-student-id');
+    const displayCardNum1 = document.querySelector('.display-card-num-1');
+    const displayValidShorts = document.querySelectorAll('.display-valid-thru-short');
+    const displayValidLongs = document.querySelectorAll('.display-valid-thru-long');
+
+    const dot0 = document.getElementById('dot-0');
+    const dot1 = document.getElementById('dot-1');
+
+    /* Öppna kortvyn (glider in från höger, startsidan ligger still i bakgrunden) */
+    function openCards() {
+      // Återställ kortmodalen till höger om den låg utslidad till vänster
+      cardsModal.classList.remove('transition-transform');
+      cardsModal.classList.remove('translate-x-0', '-translate-x-full');
+      cardsModal.classList.add('translate-x-full');
+
+      // Tvinga reflow så webbläsaren registrerar höger-positionen
+      void cardsModal.offsetWidth;
+
+      // Animera in kortmodalen till 0
+      cardsModal.classList.add('transition-transform');
+      cardsModal.classList.remove('translate-x-full');
+      cardsModal.classList.add('translate-x-0');
+
+      switchCard(0);
+    }
+
+    /* Stäng kortvyn (glider ut åt vänster, startsidan är helt stationär i bakgrunden) */
+    function closeCardsToLeft() {
+      cardsModal.classList.remove('translate-x-0', 'translate-x-full');
+      cardsModal.classList.add('-translate-x-full');
+    }
+
+    openCardsBtn.addEventListener('click', openCards);
+    closeCardsBtn.addEventListener('click', closeCardsToLeft);
+
+    // Klick direkt på kortet stänger det ut åt vänster
+    cardSurface1.addEventListener('click', closeCardsToLeft);
+    cardSurface2.addEventListener('click', closeCardsToLeft);
+
+    /* Switch between Card 1 and Card 2 */
+    function switchCard(index) {
+      activeCardIndex = Math.max(0, Math.min(index, totalCards - 1));
+      cardsTrack.style.transform = `translateX(-${activeCardIndex * 100}%)`;
+
+      if (activeCardIndex === 0) {
+        dot0.className = "w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow";
+        dot1.className = "w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer";
+      } else {
+        dot0.className = "w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer";
+        dot1.className = "w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow";
+      }
+    }
+
+    /* Redigeringsmodal: Öppnas vid klick på Teknik & Resor */
+    function openEditModal() {
+      editModal.classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      editModal.classList.add('hidden');
+    }
+
+    teknikCardTrigger.addEventListener('click', openEditModal);
+    closeEditorBtn.addEventListener('click', closeEditModal);
+    cancelEditBtn.addEventListener('click', closeEditModal);
+
+    /* Spara anpassade kortuppgifter */
+    editCardForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const newFirst = inputFirstName.value.trim() || 'Namin';
+      const newLast = inputLastName.value.trim() || 'David';
+      const newBirth = inputBirthdate.value.trim() || '2006-06-14';
+      const newId = inputStudentId.value.trim() || '08167597';
+      const newCard1 = inputCardNum1.value.trim() || '9752 2382 3453 9234';
+      const newShort = inputValidShort.value.trim() || '2027-02-10';
+      const newLong = inputValidLong.value.trim() || '2027-08-22';
+
+      displayFirstNames.forEach(el => el.textContent = newFirst);
+      displayLastNames.forEach(el => el.textContent = newLast);
+      displayBirthdates.forEach(el => el.textContent = newBirth);
+      displayStudentIds.forEach(el => el.textContent = newId);
+      if (displayCardNum1) displayCardNum1.textContent = newCard1;
+      displayValidShorts.forEach(el => el.textContent = newShort);
+      displayValidLongs.forEach(el => el.textContent = newLong);
+
+      closeEditModal();
+    });
+
+    /* Touch swipe gestures på korten */
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    cardsTrack.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    cardsTrack.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0 && activeCardIndex < totalCards - 1) {
+          switchCard(activeCardIndex + 1);
+        } else if (diff < 0 && activeCardIndex > 0) {
+          switchCard(activeCardIndex - 1);
+        }
+      }
+    }, { passive: true });
+
+    /* Keyboard controls */
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (!editModal.classList.contains('hidden')) {
+          closeEditModal();
+        } else {
+          closeCardsToLeft();
+        }
+      } else if (e.key === 'e' || e.key === 'E') {
+        openEditModal();
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        switchCard(1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        switchCard(0);
+      }
+    });
+  </script>
+</body>
+</html>
