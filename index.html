@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Mecenat</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -143,10 +143,10 @@
     <!-- ======================================================== -->
     <!-- STARTSIDA: Liseberg-kampanjen (HELT STATIONÄR)          -->
     <!-- ======================================================== -->
-    <div id="home-view" class="absolute inset-0 flex flex-col pb-20 bg-white overflow-y-auto hide-scrollbar z-10">
+    <div id="home-view" class="absolute inset-0 flex flex-col bg-white z-10 overflow-hidden">
       
-      <!-- Sökfält & Brevikon -->
-      <div class="sticky top-0 z-20 bg-white px-4 pt-3.5 pb-2.5 border-b border-gray-100 flex items-center gap-3">
+      <!-- FAST TOPPFÄLT (Alltid synligt längst upp) -->
+      <div class="flex-shrink-0 z-30 bg-white px-4 pt-3.5 pb-2.5 border-b border-gray-100 flex items-center gap-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
         <div class="flex-1 flex items-center bg-[#f0f3f6] rounded-full px-4 py-2.5 shadow-inner">
           <svg class="w-5 h-5 text-gray-700 mr-2.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -165,131 +165,137 @@
         </button>
       </div>
 
-      <!-- Liseberg Hero-sektion -->
-      <div class="relative w-full">
-        <div class="w-full h-56 bg-slate-900 relative overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=900&q=80" 
-            alt="Liseberg Karusell"
-            class="w-full h-full object-cover object-center brightness-95 contrast-110"
-            onerror="this.src='https://placehold.co/600x400/09192f/ffffff?text=Liseberg+Halloween'"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-[#cbf5f7] via-transparent to-black/30"></div>
+      <!-- SCROLLBART INNEHÅLL (Mellan topp och botten) -->
+      <div class="flex-1 overflow-y-auto hide-scrollbar pb-20">
+        
+        <!-- Liseberg Hero-sektion -->
+        <div class="relative w-full">
+          <div class="w-full h-56 bg-slate-900 relative overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=900&q=80" 
+              alt="Liseberg Karusell"
+              class="w-full h-full object-cover object-center brightness-95 contrast-110"
+              onerror="this.src='https://placehold.co/600x400/09192f/ffffff?text=Liseberg+Halloween'"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#cbf5f7] via-transparent to-black/30"></div>
+          </div>
+
+          <div class="bg-[#cbf5f7] px-6 pt-5 pb-9 text-center rounded-b-[2.2rem]">
+            <h1 class="text-2xl font-extrabold text-neutral-900 flex items-center justify-center gap-1.5 tracking-tight">
+              Liseberg <span class="text-xl">🧡</span> studenter
+            </h1>
+            <p class="text-neutral-900 text-sm font-medium mt-3 px-3 leading-snug">
+              Dagens sparfest 👻 Upp till 25 % studentrabatt på Entré &amp; Åkpass under Halloween på Liseberg.
+            </p>
+
+            <button class="mt-5 px-7 py-2.5 bg-[#0193b2] active:bg-[#007f9c] text-white font-semibold text-sm rounded-full shadow-sm hover:shadow active:scale-95 transition-transform">
+              Till kampanjen
+            </button>
+          </div>
         </div>
 
-        <div class="bg-[#cbf5f7] px-6 pt-5 pb-9 text-center rounded-b-[2.2rem]">
-          <h1 class="text-2xl font-extrabold text-neutral-900 flex items-center justify-center gap-1.5 tracking-tight">
-            Liseberg <span class="text-xl">🧡</span> studenter
-          </h1>
-          <p class="text-neutral-900 text-sm font-medium mt-3 px-3 leading-snug">
-            Dagens sparfest 👻 Upp till 25 % studentrabatt på Entré &amp; Åkpass under Halloween på Liseberg.
-          </p>
+        <!-- Spara mer i höst sektion -->
+        <div class="px-5 pt-7 pb-4">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-neutral-900 flex items-center gap-1.5">
+              Spara mer i höst <span class="text-base">🍁</span>
+            </h2>
+            <svg class="w-5 h-5 text-neutral-900 cursor-pointer" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </div>
 
-          <button class="mt-5 px-7 py-2.5 bg-[#0193b2] active:bg-[#007f9c] text-white font-semibold text-sm rounded-full shadow-sm hover:shadow active:scale-95 transition-transform">
-            Till kampanjen
-          </button>
+          <div class="flex space-x-4 overflow-x-auto hide-scrollbar -mx-5 px-5 pb-2">
+            <!-- Gina Tricot -->
+            <div class="min-w-[270px] max-w-[270px] bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+              <div class="relative h-36 bg-gray-200">
+                <img 
+                  src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80" 
+                  alt="Gina Tricot Mode"
+                  class="w-full h-full object-cover"
+                  onerror="this.src='https://placehold.co/400x300/e2e8f0/333333?text=Gina+Tricot'"
+                />
+                <span class="absolute top-3 left-3 bg-[#e65100] text-white text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wide shadow">
+                  KAMPANJ
+                </span>
+              </div>
+              <div class="p-3 bg-white flex items-center justify-between">
+                <span class="font-bold text-gray-900 text-sm tracking-tight">gina tricot</span>
+                <span class="text-xs text-gray-500 font-medium">10% studentrabatt</span>
+              </div>
+            </div>
+
+            <!-- Teknik & Resor (Klicka här för att öppna redigeringen) -->
+            <div id="teknik-card-trigger" class="min-w-[270px] max-w-[270px] bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col cursor-pointer active:scale-[0.98] transition-transform" title="Klicka för att redigera kortuppgifter">
+              <div class="relative h-36 bg-gray-100">
+                <img 
+                  src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80" 
+                  alt="Teknik & Resor"
+                  class="w-full h-full object-cover"
+                  onerror="this.src='https://placehold.co/400x300/f3f4f6/333333?text=Teknik+Resor'"
+                />
+                <span class="absolute top-3 left-3 bg-[#e65100] text-white text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wide shadow">
+                  KAMPANJ
+                </span>
+              </div>
+              <div class="p-3 bg-white flex items-center justify-between">
+                <span class="font-bold text-gray-900 text-sm tracking-tight">Teknik &amp; Resor</span>
+                <span class="text-xs text-gray-500 font-medium">Upp till 30%</span>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
 
-      <!-- Spara mer i höst sektion -->
-      <div class="px-5 pt-7 pb-4">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-bold text-neutral-900 flex items-center gap-1.5">
-            Spara mer i höst <span class="text-base">🍁</span>
-          </h2>
-          <svg class="w-5 h-5 text-neutral-900 cursor-pointer" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+      <!-- FAST BOTTENMENY (Alltid synlig längst ner) -->
+      <nav class="flex-shrink-0 h-16 bg-white border-t border-gray-200 flex items-center justify-around px-2 z-30 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+        <!-- HEM -->
+        <button class="flex flex-col items-center justify-center flex-1 text-[#008f9c] active:scale-95 transition-transform">
+          <svg class="w-6 h-6 stroke-current fill-current" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
           </svg>
-        </div>
+          <span class="text-[10px] font-bold mt-1 tracking-tight">HEM</span>
+        </button>
 
-        <div class="flex space-x-4 overflow-x-auto hide-scrollbar -mx-5 px-5 pb-2">
-          <!-- Gina Tricot -->
-          <div class="min-w-[270px] max-w-[270px] bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-            <div class="relative h-36 bg-gray-200">
-              <img 
-                src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80" 
-                alt="Gina Tricot Mode"
-                class="w-full h-full object-cover"
-                onerror="this.src='https://placehold.co/400x300/e2e8f0/333333?text=Gina+Tricot'"
-              />
-              <span class="absolute top-3 left-3 bg-[#e65100] text-white text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wide shadow">
-                KAMPANJ
-              </span>
-            </div>
-            <div class="p-3 bg-white flex items-center justify-between">
-              <span class="font-bold text-gray-900 text-sm tracking-tight">gina tricot</span>
-              <span class="text-xs text-gray-500 font-medium">10% studentrabatt</span>
+        <!-- UTFORSKA -->
+        <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
+          <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/>
+            <path stroke-linecap="round" d="M4 6h6M4 10h4"/>
+          </svg>
+          <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">UTFORSKA</span>
+        </button>
+
+        <!-- KORT (Öppnar kortvyn från höger) -->
+        <button id="open-cards-btn" class="flex flex-col items-center justify-center flex-1 text-gray-950 active:scale-90 transition-transform group cursor-pointer" aria-label="Visa Mecenatkort">
+          <div class="w-6 h-6 border-2 border-gray-900 rounded-[4px] flex items-center justify-center relative p-0.5">
+            <div class="w-full h-full border-l border-gray-900 pl-0.5 flex flex-col justify-around">
+              <div class="h-0.5 w-2 bg-gray-900"></div>
+              <div class="h-0.5 w-2 bg-gray-900"></div>
             </div>
           </div>
+          <span class="text-[10px] font-extrabold mt-1 tracking-tight">KORT</span>
+        </button>
 
-          <!-- Teknik & Resor (Klicka här för att öppna redigeringen) -->
-          <div id="teknik-card-trigger" class="min-w-[270px] max-w-[270px] bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col cursor-pointer active:scale-[0.98] transition-transform" title="Klicka för att redigera kortuppgifter">
-            <div class="relative h-36 bg-gray-100">
-              <img 
-                src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80" 
-                alt="Teknik & Resor"
-                class="w-full h-full object-cover"
-                onerror="this.src='https://placehold.co/400x300/f3f4f6/333333?text=Teknik+Resor'"
-              />
-              <span class="absolute top-3 left-3 bg-[#e65100] text-white text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wide shadow">
-                KAMPANJ
-              </span>
-            </div>
-            <div class="p-3 bg-white flex items-center justify-between">
-              <span class="font-bold text-gray-900 text-sm tracking-tight">Teknik &amp; Resor</span>
-              <span class="text-xs text-gray-500 font-medium">Upp till 30%</span>
-            </div>
-          </div>
-        </div>
-      </div>
+        <!-- KAMPANJER -->
+        <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
+          <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">KAMPANJER</span>
+        </button>
+
+        <!-- FAVORITER -->
+        <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
+          <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+          <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">FAVORITER</span>
+        </button>
+      </nav>
+
     </div>
-
-    <!-- Bottenmeny -->
-    <nav class="absolute bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 flex items-center justify-around px-2 z-20">
-      <!-- HEM -->
-      <button class="flex flex-col items-center justify-center flex-1 text-[#008f9c] active:scale-95 transition-transform">
-        <svg class="w-6 h-6 stroke-current fill-current" viewBox="0 0 24 24">
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-        <span class="text-[10px] font-bold mt-1 tracking-tight">HEM</span>
-      </button>
-
-      <!-- UTFORSKA -->
-      <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
-        <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/>
-          <path stroke-linecap="round" d="M4 6h6M4 10h4"/>
-        </svg>
-        <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">UTFORSKA</span>
-      </button>
-
-      <!-- KORT (Öppnar kortvyn från höger) -->
-      <button id="open-cards-btn" class="flex flex-col items-center justify-center flex-1 text-gray-950 active:scale-90 transition-transform group cursor-pointer" aria-label="Visa Mecenatkort">
-        <div class="w-6 h-6 border-2 border-gray-900 rounded-[4px] flex items-center justify-center relative p-0.5">
-          <div class="w-full h-full border-l border-gray-900 pl-0.5 flex flex-col justify-around">
-            <div class="h-0.5 w-2 bg-gray-900"></div>
-            <div class="h-0.5 w-2 bg-gray-900"></div>
-          </div>
-        </div>
-        <span class="text-[10px] font-extrabold mt-1 tracking-tight">KORT</span>
-      </button>
-
-      <!-- KAMPANJER -->
-      <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
-        <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">KAMPANJER</span>
-      </button>
-
-      <!-- FAVORITER -->
-      <button class="flex flex-col items-center justify-center flex-1 text-gray-700 active:scale-95 transition-transform">
-        <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-        </svg>
-        <span class="text-[10px] font-bold mt-1 tracking-tight text-gray-800">FAVORITER</span>
-      </button>
-    </nav>
 
     <!-- ======================================================== -->
     <!-- HELSKÄRMSKORT (Glider ut till vänster, stationär bakgrund)-->
@@ -590,6 +596,7 @@
     const totalCards = 2;
 
     /* DOM Elements */
+    const homeView = document.getElementById('home-view');
     const cardsModal = document.getElementById('cards-modal');
     const openCardsBtn = document.getElementById('open-cards-btn');
     const closeCardsBtn = document.getElementById('close-cards-btn');
@@ -626,15 +633,12 @@
 
     /* Öppna kortvyn (glider in från höger, startsidan ligger still i bakgrunden) */
     function openCards() {
-      // Återställ kortmodalen till höger om den låg utslidad till vänster
       cardsModal.classList.remove('transition-transform');
       cardsModal.classList.remove('translate-x-0', '-translate-x-full');
       cardsModal.classList.add('translate-x-full');
 
-      // Tvinga reflow så webbläsaren registrerar höger-positionen
       void cardsModal.offsetWidth;
 
-      // Animera in kortmodalen till 0
       cardsModal.classList.add('transition-transform');
       cardsModal.classList.remove('translate-x-full');
       cardsModal.classList.add('translate-x-0');
