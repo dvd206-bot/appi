@@ -32,6 +32,19 @@
       height: 100%;
     }
 
+    :root:fullscreen,
+    :root:fullscreen body,
+    :root:fullscreen #phone-frame {
+      width: 100vw;
+      max-width: 100vw;
+      height: 100dvh;
+      max-height: 100dvh;
+      border-radius: 0;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
     .card-font {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
@@ -55,7 +68,7 @@
       aspect-ratio: 1184 / 740;
     }
 
-    /* Permanent 90 graders rotation med proportionerlig skalning på mobil och dator */
+    /* Permanent 90 graders rotation: håller proportionerna i normal-, zoom- och helskärmsläge */
     .permanent-card-rotator {
       transform: rotate(90deg);
       transform-origin: center center;
@@ -67,6 +80,10 @@
       .permanent-card-rotator {
         width: min(540px, 64dvh, calc((440px - 48px) * 1.58));
       }
+    }
+
+    :root:fullscreen .permanent-card-rotator {
+      width: min(560px, 64dvh, calc((100vw - 56px) * 1.58));
     }
 
     .mecenat-card-shadow {
