@@ -527,7 +527,7 @@
 
             <div class="permanent-card-rotator flex items-center justify-center">
 
-              <!-- Klick på kortet växlar bara till nästa kort -->
+              <!-- Tryck på kortet swipar bort det från höger till vänster till huvudskärmen -->
               <div id="card-surface-1" class="card-container rounded-[22px] overflow-hidden mecenat-card-shadow select-none bg-neutral-900 border border-neutral-700/50 relative cursor-pointer active:scale-[0.99] transition-transform">
 
                 <!-- Kortbakgrund: Laddar Kort.png -->
@@ -606,7 +606,7 @@
 
             <div class="permanent-card-rotator flex items-center justify-center">
 
-              <!-- Klick på kort 2 växlar bara till nästa kort -->
+              <!-- Tryck på kort 2 swipar bort det från höger till vänster till huvudskärmen -->
               <div id="card-surface-2" class="card-container rounded-[22px] overflow-hidden mecenat-card-shadow select-none bg-[#f1f3f5] text-black border border-neutral-300 relative cursor-pointer active:scale-[0.99] transition-transform">
 
                 <div class="absolute inset-0 bg-[#f1f3f5]"></div>
@@ -831,6 +831,13 @@
     /* Bygg 3 slides [föregående, aktivt, nästa] så att man kan swipa åt samma håll hur många gånger som helst */
     let slidePrev, slideActive, slideNext;
 
+    function attachCardDismissHandler(surfaceEl) {
+      surfaceEl.addEventListener('click', () => {
+        if (didSwipe) return;
+        closeCardsToLeft();
+      });
+    }
+
     function initCarouselSlides() {
       const template1 = cardSurface1.closest('.w-full.h-full.flex-shrink-0');
       const template2 = cardSurface2.closest('.w-full.h-full.flex-shrink-0');
@@ -859,10 +866,7 @@
       const sourceSurface = getCardNode(cardIndex);
       const cloneSurface = sourceSurface.cloneNode(true);
       cloneSurface.removeAttribute('id');
-      cloneSurface.addEventListener('click', () => {
-        if (didSwipe) return;
-        stepCard(1);
-      });
+      attachCardDismissHandler(cloneSurface);
       rotator.innerHTML = '';
       rotator.appendChild(cloneSurface);
     }
@@ -955,7 +959,7 @@
       renderCarousel(false);
     }
 
-    /* Stäng kortvyn via krysset (glider ut åt vänster) */
+    /* Stäng kortvyn (glider ut från höger till vänster så huvudskärmen visas igen) */
     function closeCardsToLeft() {
       cardsModal.classList.remove('translate-x-0', 'translate-x-full');
       cardsModal.classList.add('-translate-x-full');
@@ -963,6 +967,8 @@
 
     openCardsBtn.addEventListener('click', openCards);
     closeCardsBtn.addEventListener('click', closeCardsToLeft);
+    attachCardDismissHandler(cardSurface1);
+    attachCardDismissHandler(cardSurface2);
 
     /* Redigeringsmodal */
     function openEditModal() {
