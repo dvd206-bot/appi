@@ -55,18 +55,17 @@
       aspect-ratio: 1184 / 740;
     }
 
-    /* Permanent 90 graders rotation */
+    /* Permanent 90 graders rotation med proportionerlig skalning på mobil och dator */
     .permanent-card-rotator {
       transform: rotate(90deg);
       transform-origin: center center;
-      width: min(540px, 72vh);
-      max-width: calc((100vw - 32px) * 1.58);
+      width: min(540px, 64dvh, calc((100vw - 48px) * 1.58));
       flex-shrink: 0;
     }
 
     @media (min-width: 440px) {
       .permanent-card-rotator {
-        max-width: calc((440px - 32px) * 1.58);
+        width: min(540px, 64dvh, calc((440px - 48px) * 1.58));
       }
     }
 
@@ -509,7 +508,7 @@
       <div class="relative flex-1 flex items-center justify-center w-full overflow-hidden">
 
         <!-- Vertikal "Valid thru"-text till vänster om kortet -->
-        <div class="absolute left-2 bottom-[140px] z-40 flex items-center gap-1.5 text-white/90 text-[11px] font-normal vertical-valid-badge pointer-events-none select-none">
+        <div class="absolute left-2 bottom-[18%] z-40 flex items-center gap-1.5 text-white/90 text-[11px] font-normal vertical-valid-badge pointer-events-none select-none">
           <svg class="w-3.5 h-3.5 text-white inline-block flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
             <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
             <path d="M6 15h3v2H6z"/>
@@ -648,7 +647,7 @@
                       </div>
 
                       <div class="flex flex-col items-end">
-                        <div class="text-right mb-0.5 leading-none">
+                        <div class="text-right mb-1">
                           <div class="text-[1.8cqw] font-normal text-neutral-800 uppercase tracking-tight">DISCOUNTS VALID THRU</div>
                           <div class="text-[4.4cqw] font-normal text-neutral-950 card-font">2027-03-31</div>
                         </div>
