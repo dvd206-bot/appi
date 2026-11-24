@@ -493,7 +493,7 @@
     </div>
 
     <!-- ======================================================== -->
-    <!-- HELSKÄRMSKORT (ÅTERSTÄLLT TILL EXAKT URSPRUNGSLAYOUT)    -->
+    <!-- HELSKÄRMSKORT                                            -->
     <!-- ======================================================== -->
     <div
       id="cards-modal"
@@ -514,7 +514,7 @@
           <span class="tracking-wide">Valid thru <span class="display-valid-thru-short">2027-02-10</span></span>
         </div>
 
-        <!-- Carousel Track -->
+        <!-- Carousel Track (rundgående 3-slot loop så man kan swipa oändligt i valfri riktning) -->
         <div id="cards-track" class="w-full h-full flex transition-transform duration-300 ease-out items-center">
 
           <!-- ======================================================== -->
@@ -524,7 +524,7 @@
 
             <div class="permanent-card-rotator flex items-center justify-center">
 
-              <!-- Klick på kortet glider ut åt vänster -->
+              <!-- Klick på kortet växlar bara till nästa kort -->
               <div id="card-surface-1" class="card-container rounded-[22px] overflow-hidden mecenat-card-shadow select-none bg-neutral-900 border border-neutral-700/50 relative cursor-pointer active:scale-[0.99] transition-transform">
 
                 <!-- Kortbakgrund: Laddar Kort.png -->
@@ -603,7 +603,7 @@
 
             <div class="permanent-card-rotator flex items-center justify-center">
 
-              <!-- Klick på kort 2 glider ut åt vänster -->
+              <!-- Klick på kort 2 växlar bara till nästa kort -->
               <div id="card-surface-2" class="card-container rounded-[22px] overflow-hidden mecenat-card-shadow select-none bg-[#f1f3f5] text-black border border-neutral-300 relative cursor-pointer active:scale-[0.99] transition-transform">
 
                 <div class="absolute inset-0 bg-[#f1f3f5]"></div>
@@ -692,14 +692,13 @@
         </div>
       </div>
 
-      <!-- BOTTYTA: 3 Prickar i mitten under kortet + Stängningskryss längst ner i mitten -->
+      <!-- BOTTYTA: 2 Ploppar i mitten under kortet + Stängningskryss längst ner i mitten -->
       <div class="w-full flex flex-col items-center justify-center gap-3 pt-1 pb-3 z-40">
 
-        <!-- Pager-prickar (horisontellt i mitten) -->
+        <!-- Pager-ploppar (endast 2 st) -->
         <div class="flex items-center gap-2.5 pointer-events-auto">
-          <button id="dot-0" onclick="switchCard(0)" class="w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow"></button>
-          <button id="dot-1" onclick="switchCard(1)" class="w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer"></button>
-          <div class="w-2.5 h-2.5 rounded-full bg-neutral-700"></div>
+          <button id="dot-0" onclick="selectCard(0)" class="w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow" aria-label="Kort 1"></button>
+          <button id="dot-1" onclick="selectCard(1)" class="w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer" aria-label="Kort 2"></button>
         </div>
 
         <!-- Runt vitt stängningskryss (X) centrerat längst ner -->
@@ -783,9 +782,11 @@
   </div>
 
   <script>
-    /* State management */
-    let activeCardIndex = 0;
+    /* State management (3 spår i karusellen för sömlös rundgång: [föregående, aktivt, nästa]) */
     const totalCards = 2;
+    let currentCard = 0;       // 0 eller 1 (vilket kort som är valt)
+    let trackSlot = 1;         // 0 = vänster, 1 = mitten, 2 = höger
+    let isAnimating = false;
 
     /* DOM Elements */
     const homeView = document.getElementById('home-view');
@@ -824,6 +825,106 @@
     const dot0 = document.getElementById('dot-0');
     const dot1 = document.getElementById('dot-1');
 
+    /* Bygg 3 slides [föregående, aktivt, nästa] så att man kan swipa åt samma håll hur många gånger som helst */
+    let slidePrev, slideActive, slideNext;
+
+    function initCarouselSlides() {
+      const template1 = cardSurface1.closest('.w-full.h-full.flex-shrink-0');
+      const template2 = cardSurface2.closest('.w-full.h-full.flex-shrink-0');
+
+      slidePrev = template2.cloneNode(true);
+      slideActive = template1;
+      slideNext = template2.cloneNode(true);
+
+      slidePrev.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      slideNext.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+      cardsTrack.innerHTML = '';
+      cardsTrack.appendChild(slidePrev);
+      cardsTrack.appendChild(slideActive);
+      cardsTrack.appendChild(slideNext);
+
+      renderCarousel(false);
+    }
+
+    function getCardNode(cardIndex) {
+      return cardIndex === 0 ? cardSurface1 : cardSurface2;
+    }
+
+    function setSlideContent(slideEl, cardIndex) {
+      const rotator = slideEl.querySelector('.permanent-card-rotator');
+      const sourceSurface = getCardNode(cardIndex);
+      const cloneSurface = sourceSurface.cloneNode(true);
+      cloneSurface.removeAttribute('id');
+      cloneSurface.addEventListener('click', () => {
+        if (didSwipe) return;
+        stepCard(1);
+      });
+      rotator.innerHTML = '';
+      rotator.appendChild(cloneSurface);
+    }
+
+    function updateDots() {
+      if (currentCard === 0) {
+        dot0.className = "w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow";
+        dot1.className = "w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer";
+      } else {
+        dot0.className = "w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer";
+        dot1.className = "w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow";
+      }
+    }
+
+    function renderCarousel(animate = true) {
+      const prevIdx = (currentCard - 1 + totalCards) % totalCards;
+      const nextIdx = (currentCard + 1) % totalCards;
+
+      setSlideContent(slidePrev, prevIdx);
+      setSlideContent(slideActive, currentCard);
+      setSlideContent(slideNext, nextIdx);
+
+      if (!animate) {
+        cardsTrack.classList.remove('transition-transform', 'duration-300', 'ease-out');
+      } else {
+        cardsTrack.classList.add('transition-transform', 'duration-300', 'ease-out');
+      }
+
+      trackSlot = 1;
+      cardsTrack.style.transform = `translateX(-100%)`;
+
+      if (!animate) {
+        void cardsTrack.offsetWidth;
+        cardsTrack.classList.add('transition-transform', 'duration-300', 'ease-out');
+      }
+
+      updateDots();
+    }
+
+    /* Stega fram (+1) eller bak (-1) oändligt runt */
+    function stepCard(direction) {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      currentCard = (currentCard + direction + totalCards) % totalCards;
+      updateDots();
+
+      const targetSlot = direction > 0 ? 2 : 0;
+      cardsTrack.style.transform = `translateX(-${targetSlot * 100}%)`;
+
+      setTimeout(() => {
+        renderCarousel(false);
+        isAnimating = false;
+      }, 310);
+    }
+
+    /* Klick på plopp */
+    function selectCard(index) {
+      if (isAnimating || index === currentCard) return;
+      const dir = index > currentCard ? 1 : -1;
+      stepCard(dir);
+    }
+
+    initCarouselSlides();
+
     /* Fullskärm via Fullscreen API vid klick på profilikonen */
     fullscreenToggleBtn.addEventListener('click', async () => {
       try {
@@ -847,10 +948,11 @@
       cardsModal.classList.remove('translate-x-full');
       cardsModal.classList.add('translate-x-0');
 
-      switchCard(0);
+      currentCard = 0;
+      renderCarousel(false);
     }
 
-    /* Stäng kortvyn (glider ut åt vänster, startsidan är helt stationär i bakgrunden) */
+    /* Stäng kortvyn via krysset (glider ut åt vänster) */
     function closeCardsToLeft() {
       cardsModal.classList.remove('translate-x-0', 'translate-x-full');
       cardsModal.classList.add('-translate-x-full');
@@ -858,23 +960,6 @@
 
     openCardsBtn.addEventListener('click', openCards);
     closeCardsBtn.addEventListener('click', closeCardsToLeft);
-
-    cardSurface1.addEventListener('click', closeCardsToLeft);
-    cardSurface2.addEventListener('click', closeCardsToLeft);
-
-    /* Switch between Card 1 and Card 2 */
-    function switchCard(index) {
-      activeCardIndex = Math.max(0, Math.min(index, totalCards - 1));
-      cardsTrack.style.transform = `translateX(-${activeCardIndex * 100}%)`;
-
-      if (activeCardIndex === 0) {
-        dot0.className = "w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow";
-        dot1.className = "w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer";
-      } else {
-        dot0.className = "w-2.5 h-2.5 rounded-full bg-neutral-700 transition-all cursor-pointer";
-        dot1.className = "w-2.5 h-2.5 rounded-full bg-white transition-all cursor-pointer shadow";
-      }
-    }
 
     /* Redigeringsmodal */
     function openEditModal() {
@@ -909,26 +994,41 @@
       displayValidShorts.forEach(el => el.textContent = newShort);
       displayValidLongs.forEach(el => el.textContent = newLong);
 
+      renderCarousel(false);
       closeEditModal();
     });
 
-    /* Touch swipe gestures på korten */
+    /* Touch swipe gestures på korten (rundgående i båda riktningar) */
     let touchStartX = 0;
     let touchEndX = 0;
+    let didSwipe = false;
 
     cardsTrack.addEventListener('touchstart', (e) => {
+      didSwipe = false;
       touchStartX = e.touches[0].clientX;
+      touchEndX = touchStartX;
+    }, { passive: true });
+
+    cardsTrack.addEventListener('touchmove', (e) => {
+      touchEndX = e.touches[0].clientX;
+      if (Math.abs(touchStartX - touchEndX) > 12) {
+        didSwipe = true;
+      }
     }, { passive: true });
 
     cardsTrack.addEventListener('touchend', (e) => {
       touchEndX = e.changedTouches[0].clientX;
       const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 40) {
-        if (diff > 0 && activeCardIndex < totalCards - 1) {
-          switchCard(activeCardIndex + 1);
-        } else if (diff < 0 && activeCardIndex > 0) {
-          switchCard(activeCardIndex - 1);
+      if (Math.abs(diff) > 35) {
+        didSwipe = true;
+        if (diff > 0) {
+          stepCard(1);
+        } else {
+          stepCard(-1);
         }
+        setTimeout(() => { didSwipe = false; }, 50);
+      } else {
+        setTimeout(() => { didSwipe = false; }, 50);
       }
     }, { passive: true });
 
@@ -943,9 +1043,9 @@
       } else if (e.key === 'e' || e.key === 'E') {
         openEditModal();
       } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        switchCard(1);
+        stepCard(1);
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        switchCard(0);
+        stepCard(-1);
       }
     });
   </script>
