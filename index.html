@@ -55,18 +55,18 @@
       aspect-ratio: 1184 / 740;
     }
 
-    /* Permanent 90 graders rotation - nerskalad för bättre luft runt om */
+    /* Permanent 90 graders rotation */
     .permanent-card-rotator {
       transform: rotate(90deg);
       transform-origin: center center;
       width: min(540px, 72vh);
-      max-width: calc((100vw - 56px) * 1.34);
+      max-width: calc((100vw - 32px) * 1.58);
       flex-shrink: 0;
     }
 
     @media (min-width: 440px) {
       .permanent-card-rotator {
-        max-width: calc((440px - 56px) * 1.34);
+        max-width: calc((440px - 32px) * 1.58);
       }
     }
 
@@ -101,12 +101,14 @@
       box-sizing: border-box;
     }
 
+    /* Inre cirkeln */
     .ring-inner {
       width: 15.8cqw;
       height: 15.8cqw;
       border-width: 1.75cqw;
     }
 
+    /* Yttre cirkeln */
     .ring-middle {
       width: 25.2cqw;
       height: 25.2cqw;
@@ -139,6 +141,7 @@
       }
     }
 
+    /* Vertikal text till vänster om kortet */
     .vertical-valid-badge {
       writing-mode: vertical-rl;
     }
